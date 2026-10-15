@@ -58,6 +58,7 @@ layer_night.fill((0,0,30))
 camera = Camera(map_width,map_height,window_width, window_height) # charge la camera
 group_monster = pygame.sprite.Group()# Comme une liste mais les methode de monstre s'utilise direct sur group (voir update)
 defense_group = pygame.sprite.Group()
+projectiles_group = pygame.sprite.Group()
 
 player = Player(50,50,map_width,map_height,group_wall,group_monster,group_wall_destructible) # charge le joueur
 ressources = Ressources()
@@ -97,7 +98,7 @@ while not quit: #Pour garder la window ouverte
                 pygame.display.toggle_fullscreen()
                 
             elif event.key == pygame.K_t :
-                canon_test.tirer()
+                canon_test.tirer(projectiles_group)
 
     
     
@@ -108,6 +109,7 @@ while not quit: #Pour garder la window ouverte
     camera.update(player)
     group_monster.update() # Update tous les monstre du groupe
     defense_group.update()
+    projectiles_group.update()
     
     #GESTION DE LA PHASE NUIT ///// ICI ????
     if time.phase % 2 == 0 :
@@ -140,6 +142,9 @@ while not quit: #Pour garder la window ouverte
     for defense in defense_group.sprites():
         window.blit(defense.image, camera.apply(defense.rect.x, defense.rect.y))
     
+    for projectiles in projectiles_group.sprites():
+        window.blit(projectiles.image, camera.apply(projectiles.rect.x, projectiles.rect.y))
+        
     police = pygame.font.Font(None, 30) #Police par default taille 30
     text_phase = police.render("Phase ("+str(time.phase)+"): "+str(time.day_phase), True, (0, 0, 0)) #Ecrit mon texte avec la couleur 0,0,0
     window.blit(text_phase, (330,10)) #Dessine mon texte à la position 330,10

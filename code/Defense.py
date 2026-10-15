@@ -36,6 +36,7 @@ class Canon(Defense) :
         self.last_time_anime = 0
         self.animation_speed = 500
         
+        
     def update(self):
         nb_images = len(self.images)
         if self.is_animating :
@@ -51,13 +52,39 @@ class Canon(Defense) :
                 
                 self.image = self.images[self.current_frame]
     
-    def tirer(self) :
+    def tirer(self, projectiles_group) :
         self.is_animating = True
         self.last_time_anime = pygame.time.get_ticks()
-    
-class Projectiles() :
-    def __init__(self, x, y) :
-        self.image = pygame.image.load("")
         
+        spawn_x = self.rect.centerx
+        spawn_y = self.rect.centery
+        
+        direction_x = 0
+        direction_y = -1
+        
+        boulet = Projectiles(spawn_x, spawn_y, "asset/canon_animation/boulet_canon.png", direction_x, direction_y)
+        projectiles_group.add(boulet)
+    
+class Projectiles(pygame.sprite.Sprite) :
+    def __init__(self, x, y, image, direction_x, direction_y) :
+        super().__init__()
+        self.image = pygame.image.load(image)
+        self.image = pygame.transform.scale(self.image, (30, 30))
+        
+        self.rect = self.image.get_rect(center=(x,y))
+        self.pos_x = self.rect.x
+        self.pos_y = self.rect.y
+        
+        self.direction_x = direction_x
+        self.direction_y = direction_y
         self.velocity = 10
         self.damage = 10 
+        
+    def update(self) :
+        self.pos_x += self.direction_x * self.velocity
+        self.pos_y += self.direction_y * self.velocity
+        self.rect.x = int(self.pos_x)
+        self.rect.y = int(self.pos_y)
+        
+        if self.rect.x < -200 or self.rect.x > 3000 or self.rect.y < -200 or self.rect.y > 3000 :
+            self.kill()
