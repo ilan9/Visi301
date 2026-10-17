@@ -98,7 +98,7 @@ while not quit: #Pour garder la window ouverte
                 pygame.display.toggle_fullscreen()
                 
             elif event.key == pygame.K_t :
-                canon_test.tirer(projectiles_group)
+                canon_test.tirer(projectiles_group, group_monster)
 
     
     
@@ -111,6 +111,14 @@ while not quit: #Pour garder la window ouverte
     defense_group.update()
     projectiles_group.update()
     
+    #collision monstres, boulets
+    for boulet in projectiles_group :
+        hurt_monsters = pygame.sprite.spritecollide(boulet, group_monster, False)
+        
+        for monster in hurt_monsters :
+            monster.hurt(boulet.damage)
+            boulet.kill()
+               
     #GESTION DE LA PHASE NUIT ///// ICI ????
     if time.phase % 2 == 0 :
         current_time = pygame.time.get_ticks()
