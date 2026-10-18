@@ -128,9 +128,10 @@ class Monster(pygame.sprite.Sprite) :
             self.dead_anim()
 
     def dead_anim(self):
-        self.anim_type = "dead" # Animation encore plus prioritaire
-        self.anim_progress = 0
-        self.anmimation_in_progress = True
+        if self.anim_type != "dead":
+            self.anim_type = "dead" # Animation encore plus prioritaire
+            self.anim_progress = 0
+            self.anmimation_in_progress = True
 
     def dead(self):
         self.kill()
@@ -149,5 +150,6 @@ class Monster(pygame.sprite.Sprite) :
                     self.anim_progress +=1
                 self.anim_time = pygame.time.get_ticks()
         if self.anim_type == "hurt":
-            print (self.anim_progress)
+            #print (self.anim_progress)
+            pass
         self.image = self.anim[self.anim_type][self.anim_progress]

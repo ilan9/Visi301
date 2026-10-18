@@ -86,8 +86,11 @@ class Canon(Defense) :
             #on calcule la norme du vecteur.
             distance = ((monster_x - posx)**2 + (monster_y - posy)**2)**0.5
             if distance < min_length :
-                min_length = distance
-                closest = monster
+                if monster.health >0:
+                    min_length = distance
+                    print(monster.health)
+                    
+                    closest = monster
         return closest    
         
     

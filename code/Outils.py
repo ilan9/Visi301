@@ -13,7 +13,6 @@ def decoup_image(chemin_image_animation, witdh,height,nbrimage_x, nbrimage_y, re
             if reverse :
                 img = pygame.transform.flip(img,True,False)
             if change_size:
-                print(scale_x)
                 img = pygame.transform.scale(img,(scale_x,scale_y))
             animation.append(img)
     return animation
