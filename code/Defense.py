@@ -88,8 +88,6 @@ class Canon(Defense) :
             if distance < min_length :
                 if monster.health >0:
                     min_length = distance
-                    print(monster.health)
-                    
                     closest = monster
         return closest    
         

@@ -9,6 +9,7 @@ from Monster import Monster
 from Spawner import monster_spawner
 from Ressources import Ressources
 from Defense import Canon
+from Menu import Menu
 
 
 
@@ -62,6 +63,7 @@ projectiles_group = pygame.sprite.Group()
 
 player = Player(50,50,map_width,map_height,group_wall,group_monster,group_wall_destructible) # charge le joueur
 ressources = Ressources()
+menu = Menu(window)
 
 canon_test = Canon(650, 700, 100)
 defense_group.add(canon_test)
@@ -99,6 +101,9 @@ while not quit: #Pour garder la window ouverte
                 
             elif event.key == pygame.K_t :
                 canon_test.tirer(projectiles_group, group_monster)
+
+            elif event.key == pygame.K_e:
+                menu.open_menu()
 
     
     
