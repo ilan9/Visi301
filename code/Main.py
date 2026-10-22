@@ -10,6 +10,7 @@ from Spawner import monster_spawner
 from Ressources import Ressources
 from Defense import Canon
 from Menu import Menu
+from Acceuil import Acceuil
 
 
 
@@ -23,10 +24,13 @@ pygame.mixer.music.set_volume(0.3)
 pygame.mixer.music.play(-1)
 
 window_width, window_height = 1100,600 
-window = pygame.display.set_mode((window_width, window_height))
+window = pygame.display.set_mode((window_width, window_height),pygame.FULLSCREEN | pygame.SCALED)
 pygame.display.set_caption("hiver")
 
 pygame.time.Clock().tick(60) # limiter a 60 fps
+
+acceuil = Acceuil(window)
+acceuil.run()
 
 
 tmx_data = pytmx.util_pygame.load_pygame("Tiled/test_carte.tmx") # charger la carte
@@ -45,7 +49,7 @@ for layer in tmx_data.objects:
     if layer.type == "Home":
         home = Home(pygame.Rect(layer.x,layer.y,layer.width,layer.height))
     if layer.type == "Wall_destructible":
-        wall_destructible = Wall_destructible(pygame.Rect(layer.x,layer.y,layer.width,layer.height),layer.name,tmx_data, group_wall, group_wall_destructible)
+        wall_destructible = Wall_destructible(pygame.Rect(layer.x,layer.y,layer.width,layer.height),layer,tmx_data, group_wall, group_wall_destructible)
         group_wall_destructible.add(wall_destructible)
         group_wall.add(wall_destructible) 
         
@@ -63,7 +67,7 @@ projectiles_group = pygame.sprite.Group()
 
 player = Player(50,50,map_width,map_height,group_wall,group_monster,group_wall_destructible) # charge le joueur
 ressources = Ressources()
-menu = Menu(window)
+menu = Menu(window,ressources,group_wall_destructible,player,home)
 
 canon_test = Canon(650, 700, 100)
 defense_group.add(canon_test)
@@ -84,6 +88,8 @@ while not quit: #Pour garder la window ouverte
         elif event.type == pygame.KEYDOWN: # Detecter TOUTES les touches pressées
             if event.key == pygame.K_p: # Changer de phase
                 time.change_phase() # Cf: Time.py
+            elif event.key == pygame.K_F1:
+                quit = True
             elif event.key == pygame.K_m: # Faire apparaitre un monstre
                 monster_spawner(group_monster,map_width,map_height,group_wall,home,group_wall_destructible, ressources)
                 
@@ -124,7 +130,7 @@ while not quit: #Pour garder la window ouverte
             monster.hurt(boulet.damage)
             boulet.kill()
                
-    #GESTION DE LA PHASE NUIT ///// ICI ????
+    #GESTION DE LA PHASE NUIT ///// ICI ???? NONNN dans time si possible
     current_time = pygame.time.get_ticks()
     if time.phase % 2 == 0 :
         current_spawn_delay = base_spawn_delay / 1.1**(time.phase/2) # Une formule pour que les monstres apparaissent de plus en plus vite en avancant dans les phases.
@@ -133,7 +139,7 @@ while not quit: #Pour garder la window ouverte
             monster_spawner(group_monster,map_width,map_height,group_wall,home, group_wall_destructible, ressources)
             last_spawn_time = current_time
     
-    #TIRER CANOn /// ICI???
+    #TIRER CANOn /// ICI??? NONNN dans le update du canon dans defense.py 
     if last_shoot_time + shoot_delay <= current_time :
         canon_test.tirer(projectiles_group, group_monster)
         last_shoot_time = current_time
@@ -171,14 +177,14 @@ while not quit: #Pour garder la window ouverte
     y = 50
     for rampart in group_wall_destructible:
         if rampart.life > 0:
-            pv_wall = police.render(rampart.name+" PV : "+str(rampart.life), True, (0, 0, 0))
+            pv_wall = police.render(rampart.name+" PV : "+str(rampart.life)+"/"+str(rampart.life_max), True, (0, 0, 0))
             window.blit(pv_wall, (5,y))
             y += 25
     
     pv_joueur = police.render("PV Joueur : "+str(player.health), True, (0, 0, 0)) # PV du joueur
     window.blit(pv_joueur, (600,10))
     
-    texte_ressources = police.render("Ressources : "+str(ressources.quantity), True, (0, 0, 0)) # Qté de ressources
+    texte_ressources = police.render("Ressources : "+str(ressources.quantity)+"R", True, (0, 0, 0)) # Qté de ressources
     window.blit(texte_ressources, (window_width-200,window_height-50))
     
     pygame.display.flip() # Met a jour l'écran

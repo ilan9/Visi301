@@ -22,7 +22,7 @@ class Home(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on ve
 
 
 class Wall_destructible(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on veut les mettre dans un groupe
-    def __init__(self, rect, name, tmx_data, group_wall:pygame.sprite.Group, group_rampart:pygame.sprite.Group):
+    def __init__(self, rect, layer_obj, tmx_data, group_wall:pygame.sprite.Group, group_rampart:pygame.sprite.Group):
         super().__init__()
         self.rect = rect
         self.life_max = 100
@@ -31,10 +31,15 @@ class Wall_destructible(pygame.sprite.Sprite): # Elle doit hérite de sprite.Spr
 
         #Pour faire disparaitre l'image associé
         self.active = True
-        self.name = name
+        self.name = layer_obj.name
         self.tmx_data = tmx_data
         self.group_wall = group_wall
         self.group_rampart = group_rampart
+        self.layer = layer_obj
+
+        for layer in self.tmx_data.layers:
+            if layer.name == self.name:
+                self.layer_carte = layer
 
     def hurt(self,damage): 
             self.life -= damage
@@ -51,10 +56,7 @@ class Wall_destructible(pygame.sprite.Sprite): # Elle doit hérite de sprite.Spr
     def dead(self):
         self.group_wall.remove(self) # Enlever du groupe qui gere les collision de passage
         self.group_rampart.remove(self) # Enlever du groupe qui gère les attaques
-        for layer in self.tmx_data.layers:
-            if layer.name == self.name:
-                print(self.name, "est detruit")
-                layer.visible = False
+        self.layer_carte.visible = False
     
     def resurrect(self): # Ajouter un boutton ? un menu ? une case ? 
         self.group_wall.add(self) # Ajouter au groupe qui gere les collision de passage
