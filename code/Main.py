@@ -69,8 +69,10 @@ canon_test = Canon(650, 700, 100)
 defense_group.add(canon_test)
 
 last_spawn_time = 0
+last_shoot_time = 0
 base_spawn_delay = 1000
 current_spawn_delay = 1000
+shoot_delay = 1500
 
 # window pygame reste ouverte
 quit = False
@@ -99,8 +101,6 @@ while not quit: #Pour garder la window ouverte
             elif event.key == pygame.K_F11: #Mettre en plein écran
                 pygame.display.toggle_fullscreen()
                 
-            elif event.key == pygame.K_t :
-                canon_test.tirer(projectiles_group, group_monster)
 
             elif event.key == pygame.K_e:
                 menu.open_menu()
@@ -125,16 +125,18 @@ while not quit: #Pour garder la window ouverte
             boulet.kill()
                
     #GESTION DE LA PHASE NUIT ///// ICI ????
+    current_time = pygame.time.get_ticks()
     if time.phase % 2 == 0 :
-        current_time = pygame.time.get_ticks()
         current_spawn_delay = base_spawn_delay / 1.1**(time.phase/2) # Une formule pour que les monstres apparaissent de plus en plus vite en avancant dans les phases.
         
         if last_spawn_time + current_spawn_delay <= current_time :
             monster_spawner(group_monster,map_width,map_height,group_wall,home, group_wall_destructible, ressources)
             last_spawn_time = current_time
     
-    
-            
+    #TIRER CANOn /// ICI???
+    if last_shoot_time + shoot_delay <= current_time :
+        canon_test.tirer(projectiles_group, group_monster)
+        last_shoot_time = current_time
 
     # Afficher la carte
     for layer in tmx_data.visible_layers: #C'est les couches dans Tiled

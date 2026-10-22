@@ -53,25 +53,27 @@ class Canon(Defense) :
                 self.image = self.images[self.current_frame]
     
     def tirer(self, projectiles_group, group_monster) :
-        self.is_animating = True
-        self.last_time_anime = pygame.time.get_ticks()
-        
-        spawn_x = self.rect.centerx
-        spawn_y = self.rect.centery
-        
         monster_to_shoot = self.closest_monster(group_monster)
-        
-        dx = monster_to_shoot.rect.centerx - spawn_x
-        dy = monster_to_shoot.rect.centery - spawn_y
-        
-        distance = (dx**2 + dy**2)**0.5
-        
-        direction_x = dx / distance
-        direction_y = dy / distance
-        
-        
-        boulet = Projectiles(spawn_x, spawn_y, "asset/canon_animation/boulet_canon.png", direction_x, direction_y)
-        projectiles_group.add(boulet)
+        if monster_to_shoot != None :
+            
+            self.is_animating = True
+            self.last_time_anime = pygame.time.get_ticks()
+            
+            spawn_x = self.rect.centerx
+            spawn_y = self.rect.centery
+            
+            
+            dx = monster_to_shoot.rect.centerx - spawn_x
+            dy = monster_to_shoot.rect.centery - spawn_y
+            
+            distance = (dx**2 + dy**2)**0.5
+            
+            direction_x = dx / distance
+            direction_y = dy / distance
+            
+            
+            boulet = Projectiles(spawn_x, spawn_y, "asset/canon_animation/boulet_canon.png", direction_x, direction_y)
+            projectiles_group.add(boulet)
         
     def closest_monster(self, group_monster):
         posx = self.rect.centerx
