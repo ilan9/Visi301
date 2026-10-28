@@ -8,7 +8,7 @@
     ],
     "fileStates": {
         "maison_etplus.tsx": {
-            "scaleInDock": 4,
+            "scaleInDock": 3,
             "scaleInEditor": 5.5
         },
         "test_background_neige.tsx": {
@@ -19,11 +19,11 @@
             "expandedGroupLayers": [
                 8
             ],
-            "scale": 1.5,
-            "selectedLayer": 8,
+            "scale": 0.75,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1081.6666666666665,
-                "y": 915.3333333333333
+                "x": 1055.3333333333333,
+                "y": 1340
             }
         }
     },
