@@ -2,7 +2,7 @@ import pygame
 from Outils import decoup_image
 
 class Monster(pygame.sprite.Sprite) :
-    def __init__(self,x,y,group_wall,home, group_rampart, ressources ):
+    def __init__(self,x,y,group_wall,home, group_rampart, pieces ):
         super().__init__()
         self.health = 10
         self.max_health = 10
@@ -24,7 +24,7 @@ class Monster(pygame.sprite.Sprite) :
         self.group_wall = group_wall
         self.home = home # l'objectif du monstre
         self.group_rampart = group_rampart
-        self.ressources = ressources
+        self.pieces = pieces
         
         #La position de départ de notre monstre :
         self.rect.x = x
@@ -135,7 +135,7 @@ class Monster(pygame.sprite.Sprite) :
 
     def dead(self):
         self.kill()
-        self.ressources.increases(5)
+        self.pieces.increases(5)
     
 
     def play_animations(self):

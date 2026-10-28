@@ -2,7 +2,7 @@ import pygame
 from Outils import decoup_image
 
 class Player(pygame.sprite.Sprite) :
-    def __init__(self,x,y,border_x,border_y,list_wall, group_monster, group_rampart):
+    def __init__(self,x,y,border_x,border_y,list_wall, group_monster, group_rampart,group_wood,group_stone,time):
         super().__init__()
         self.health = 500
         self.max_health = 500
@@ -29,9 +29,15 @@ class Player(pygame.sprite.Sprite) :
         self.border_x = border_x
         self.border_y = border_y
 
+        #Element extérieur
         self.group_monster = group_monster
         self.list_wall = list_wall
         self.group_rampart = group_rampart
+        self.group_wood = group_wood
+        self.wood_cooldown = 0
+        self.group_stone = group_stone
+        self.stone_cooldown = 0
+        self.time = time
 
         #Animation
         self.anim_type = "left"
@@ -79,14 +85,15 @@ class Player(pygame.sprite.Sprite) :
         else:
             self.rect.x += velocity_x
             self.rect.y += velocity_y
-        #print((self.rect.x,self.rect.y))
+
 
         # test collision avec les murs, si ils se chevauche on annule le dernier mouv du joueur
         #if pygame.sprite.spritecollideany(self,self.list_wall):
         #    self.rect.x = last_posx
         #    self.rect.y = last_posy
 
-        if pygame.sprite.spritecollideany(self,self.group_rampart): #Sauter par dessus les remparts
+        #Sauter par dessus les remparts
+        if self.collision_group(self.group_rampart): 
             if not self.anim_jump:
                 self.anim_progress = 2
             self.anim_jump = True
@@ -96,6 +103,13 @@ class Player(pygame.sprite.Sprite) :
 
         if velocity_x != 0 or velocity_y != 0:
             self.play_animations()
+
+        # Zone de farm
+        if self.time.day: #Si il fait jour le joueur peut récupérer des ressources
+            self.farm_time(self.group_wood,self.wood_cooldown,self.cooldown)
+            self.farm_time(self.group_stone,self.stone_cooldown,self.cooldown)
+        
+            
             
     def attack_monster(self):
         colliding_monsters = pygame.sprite.spritecollide(self, self.group_monster, False)
@@ -138,3 +152,15 @@ class Player(pygame.sprite.Sprite) :
                 self.anim_progress +=1
             self.image = self.anim[self.anim_type][self.anim_progress]
             self.anim_time = pygame.time.get_ticks()
+
+    def collision_group(self,group): #Renvoi un booléen en fonction de la collision avec un group
+        return pygame.sprite.spritecollideany(self,group)
+
+    def farm_time(self,group,group_cooldown,cooldown):
+        if self.collision_group(group):
+            if pygame.time.get_ticks()-group_cooldown > cooldown:
+                element = next(iter(group),None) # Renvoie un élement du group, pas forcément le premier
+                self.wood_cooldown= pygame.time.get_ticks() #Ne peut pas farm 2 ressources en 1 sec
+                self.stone_cooldown = pygame.time.get_ticks()
+                if element:
+                    element.ressources.increases(1)
