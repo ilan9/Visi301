@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on veut les mettre dans un groupe
     def __init__(self, x, y, health) :
@@ -15,6 +16,7 @@ class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on
 class Canon(Defense) :
     def __init__(self, x, y, health):
         super().__init__(x, y, health)
+        #chargement des images d'animation
         self.images = [
             pygame.transform.scale(pygame.image.load("asset/canon_animation/canon1.png"), (200,200)),
             pygame.transform.scale(pygame.image.load("asset/canon_animation/canon2.png"), (200,200)),
@@ -23,19 +25,36 @@ class Canon(Defense) :
             pygame.transform.scale(pygame.image.load("asset/canon_animation/canon5.png"), (200,200)),
             pygame.transform.scale(pygame.image.load("asset/canon_animation/canon6.png"), (200,200))
         ]
-        
         self.current_frame = 0
+        self.angle = 0
         
-        self.image = self.images[self.current_frame]        
+        
+        #on définit le réctangle et on le centre.
+        self.image = self.images[self.current_frame]     
         self.rect = self.image.get_rect()
-        
         self.rect.x = x
         self.rect.y = y
         
+        #gestion de l'animation
         self.is_animating = False
         self.last_time_anime = 0
         self.animation_speed = 500
         
+    def rotate_to(self, target_pos) :
+        """Cette fonction permet d'orienter un canon vers un monstre (target_pos)"""
+        diffx = target_pos.rect.centerx - self.rect.centerx
+        diffy = target_pos.rect.centery - self.rect.centery
+        
+        #pour calculer l'angle, nous disponsons de dx et dy, soit les différences x et y qui séparent le canon du monstre.
+        #A l'aide de cela, nous voulons trouver la ligne qui relie directement le monstre au canon et pour cela nous nous servirons de la tangente.
+        
+ 
+        self.angle = math.atan2(-diffy, diffx)#la tangente.
+        self.angle = math.degrees(self.angle) - 90 #On la convertie en degré d'angle///.
+        
+        center = self.rect.center
+        self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
+        self.rect = self.image.get_rect(center=center)
         
     def update(self):
         nb_images = len(self.images)
@@ -50,12 +69,15 @@ class Canon(Defense) :
                     self.current_frame = 0
                     self.is_animating = False
                 
-                self.image = self.images[self.current_frame]
+                center = self.rect.center
+                self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
+                self.rect = self.image.get_rect(center=center)#Pour garder le centre au bon endroit
     
     def tirer(self, projectiles_group, group_monster) :
         monster_to_shoot = self.closest_monster(group_monster)
         if monster_to_shoot != None :
             
+            self.rotate_to(monster_to_shoot)
             self.is_animating = True
             self.last_time_anime = pygame.time.get_ticks()
             
@@ -76,6 +98,7 @@ class Canon(Defense) :
             projectiles_group.add(boulet)
         
     def closest_monster(self, group_monster):
+        """Cette fonction permet de trouver le monstre le plus proche dans un groupe de monstre, elle le renvoie."""
         posx = self.rect.centerx
         posy = self.rect.centery
     
@@ -95,6 +118,7 @@ class Canon(Defense) :
         
     
 class Projectiles(pygame.sprite.Sprite) :
+    """Cette classe gère les différents types de projectiles."""
     def __init__(self, x, y, image, direction_x, direction_y) :
         super().__init__()
         self.image = pygame.image.load(image)
