@@ -26,3 +26,22 @@ class Draw():
     def group_sprite(self,group,camera):
         for sprite in group.sprites():
             self.window.blit(sprite.image,camera.apply(sprite.rect.x,sprite.rect.y))
+            
+    def text(self, home, ramparts, player, pieces, wood, stone, time, window_width, window_height) :
+        #Phase
+        self.text_value("Phase ("+str(time.phase)+"): ",time.day_phase,window_width//2-60,10)
+
+        #PV 
+        self.text_value("PV Maison : ",home.life,5,10)
+        y = 50
+        for rampart in ramparts:
+            if rampart.life > 0:
+                self.text_value(rampart.name+" PV : "+str(rampart.life)+"/",rampart.life_max,5,y)
+                y += 25
+
+        self.text_value("PV Joueur : ",player.health,window_width-180,10)
+
+        #Ressources
+        self.text_value("Pièces : ",pieces.quantity,window_width-200,window_height-50,"$")
+        self.text_value("Bois : ",wood.quantity,window_width-200,window_height-100)
+        self.text_value("Pierre : ",stone.quantity,window_width-200,window_height-130)

@@ -16,6 +16,7 @@ class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on
 class Canon(Defense) :
     def __init__(self, x, y, health):
         super().__init__(x, y, health)
+        
         #chargement des images d'animation
         self.images = [
             pygame.transform.scale(pygame.image.load("asset/canon_animation/canon1.png"), (200,200)),
@@ -28,10 +29,10 @@ class Canon(Defense) :
         self.current_frame = 0
         self.angle = 0
         
-        
-        #on définit le réctangle et on le centre.
+        #on définit le rectangle et on le centre.
         self.image = self.images[self.current_frame]     
         self.rect = self.image.get_rect()
+        
         self.rect.x = x
         self.rect.y = y
         
@@ -39,6 +40,11 @@ class Canon(Defense) :
         self.is_animating = False
         self.last_time_anime = 0
         self.animation_speed = 500
+        
+        #cadence de tir
+        self.last_shoot_time = 0
+        self.shoot_delay = 1500
+        self.portee = 450
         
     def rotate_to(self, target_pos) :
         """Cette fonction permet d'orienter un canon vers un monstre (target_pos)"""
@@ -56,28 +62,38 @@ class Canon(Defense) :
         self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
         self.rect = self.image.get_rect(center=center)
         
-    def update(self):
+        
+        
+    def update(self, group_monster, projectiles_group):
+        current_time = pygame.time.get_ticks()
+        
+        if current_time - self.last_shoot_time >= self.shoot_delay :
+            cible = self.closest_monster(group_monster)
+            if cible is not None :
+                self.tirer(projectiles_group, cible)
+                self.last_shoot_time = current_time
+                
+        #gestion de l'animation :
         nb_images = len(self.images)
         if self.is_animating :
-            current_time = pygame.time.get_ticks()
-            
-            if self.last_time_anime + self.animation_speed/nb_images <= current_time :
-                self.current_frame = self.current_frame + 1
-                self.last_time_anime = pygame.time.get_ticks()
+            delai_frame = self.animation_speed / nb_images
+            if current_time - self.last_time_anime >= delai_frame :
+                self.current_frame += 1 
+                self.last_time_anime = current_time
                 
                 if self.current_frame >= nb_images :
                     self.current_frame = 0
                     self.is_animating = False
-                
+                    
                 center = self.rect.center
                 self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
-                self.rect = self.image.get_rect(center=center)#Pour garder le centre au bon endroit
-    
-    def tirer(self, projectiles_group, group_monster) :
-        monster_to_shoot = self.closest_monster(group_monster)
-        if monster_to_shoot != None :
+                self.rect = self.image.get_rect(center=center)
+        
             
-            self.rotate_to(monster_to_shoot)
+            
+    
+    def tirer(self, projectiles_group, target) :
+            self.rotate_to(target)
             self.is_animating = True
             self.last_time_anime = pygame.time.get_ticks()
             
@@ -85,18 +101,19 @@ class Canon(Defense) :
             spawn_y = self.rect.centery
             
             
-            dx = monster_to_shoot.rect.centerx - spawn_x
-            dy = monster_to_shoot.rect.centery - spawn_y
+            dx = target.rect.centerx - spawn_x
+            dy = target.rect.centery - spawn_y
             
             distance = (dx**2 + dy**2)**0.5
             
-            direction_x = dx / distance
-            direction_y = dy / distance
+            if distance > 0 :
+                direction_x = dx / distance
+                direction_y = dy / distance
+                
+                
+                boulet = Projectiles(spawn_x, spawn_y, "asset/canon_animation/boulet_canon.png", direction_x, direction_y)
+                projectiles_group.add(boulet)
             
-            
-            boulet = Projectiles(spawn_x, spawn_y, "asset/canon_animation/boulet_canon.png", direction_x, direction_y)
-            projectiles_group.add(boulet)
-        
     def closest_monster(self, group_monster):
         """Cette fonction permet de trouver le monstre le plus proche dans un groupe de monstre, elle le renvoie."""
         posx = self.rect.centerx
