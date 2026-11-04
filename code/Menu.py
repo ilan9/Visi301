@@ -30,19 +30,19 @@ class Menu ():
         self.list_buttons = self.create_buttons()
 
 
-    # def create_buttons(self): # Creer les bouttons aux bonnes coordonnées
-    #     list_buttons = []
-    #     buttons_to_create = [
-    #         {"text": "Soigner la maison\n +10 PV", "action": lambda: self.action.healing_home()}, # lambda => permet de stocker des fonction et non leur resultats
-    #         {"text": "Ameliorer mur\nNord: -50$\n"+str(self.rampart["Mur Nord"].life)+"/"+str(self.rampart["Mur Nord"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Nord"])},
-    #         {"text": "Ameliorer mur\nOuest: -50$\n"+str(self.rampart["Mur Ouest"].life)+"/"+str(self.rampart["Mur Ouest"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Ouest"])},
-    #         {"text": "Ameliorer mur\nEst: -50$\n"+str(self.rampart["Mur Est"].life)+"/"+str(self.rampart["Mur Est"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Est"])},
-    #         {"text": "Ameliorer mur\nSud: -50$\n"+str(self.rampart["Mur Sud"].life)+"/"+str(self.rampart["Mur Sud"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Sud"])},
-    #         #Text dynamique plus bas
+    def create_buttons(self): # Creer les bouttons aux bonnes coordonnées
+        list_buttons = []
+        buttons_to_create = [
+            {"text": "Soigner la maison\n +10 PV", "action": lambda: self.action.healing_home()}, # lambda => permet de stocker des fonction et non leur resultats
+            {"text": "Ameliorer mur\nNord: -50$\n"+str(self.rampart["Mur Nord"].life)+"/"+str(self.rampart["Mur Nord"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Nord"])},
+            {"text": "Ameliorer mur\nOuest: -50$\n"+str(self.rampart["Mur Ouest"].life)+"/"+str(self.rampart["Mur Ouest"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Ouest"])},
+            {"text": "Ameliorer mur\nEst: -50$\n"+str(self.rampart["Mur Est"].life)+"/"+str(self.rampart["Mur Est"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Est"])},
+            {"text": "Ameliorer mur\nSud: -50$\n"+str(self.rampart["Mur Sud"].life)+"/"+str(self.rampart["Mur Sud"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Sud"])},
+            #Text dynamique plus bas
 
 
             
-        #] #A remplir à la main
+        ] #A remplir à la main
 
         width,height = self.buttons_size["width"],self.buttons_size["height"]
         external_margin,internal_margin = self.buttons_size["external_margin"],self.buttons_size["internal_margin"]
