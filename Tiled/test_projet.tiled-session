@@ -12,22 +12,28 @@
             "scaleInDock": 3,
             "scaleInEditor": 5.5
         },
+        "mur.tsx": {
+            "scaleInDock": 0.5037
+        },
         "test_background_neige.tsx": {
             "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
         "test_carte.tmx": {
             "expandedGroupLayers": [
-                8
+                8,
+                23,
+                24
             ],
-            "scale": 0.75,
-            "selectedLayer": 2,
+            "scale": 0.7777,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 1055.3333333333333,
-                "y": 1340
+                "x": 766.3623505207663,
+                "y": 997.8140671209978
             }
         }
     },
+    "last.externalTilesetPath": "/Users/antoinegarcia/Documents/GitHub/neiiiiiiiige/Tiled",
     "last.imagePath": "C:/Users/ilanp/OneDrive - Université Savoie Mont Blanc/Documents/Ecole/L2/Visi301/neiiiiiiiige/asset/ground_shaker_asset/ground_shaker_asset/Red/Towers",
     "map.height": 30,
     "map.lastUsedFormat": "tmx",
@@ -42,6 +48,7 @@
         "test_background_neige.tsx",
         "test_carte.tmx"
     ],
+    "tileset.lastUsedFilter": "Fichiers de jeu de tuiles Tiled (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.transparentColor": "#000000",
     "tileset.useTransparentColor": true
