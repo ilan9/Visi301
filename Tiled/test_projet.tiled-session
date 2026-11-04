@@ -28,7 +28,7 @@
             }
         }
     },
-    "last.imagePath": "C:/Users/ilanp/OneDrive - Université Savoie Mont Blanc/Documents/Ecole/L2/Visi301/neiiiiiiiige/asset",
+    "last.imagePath": "C:/Users/ilanp/OneDrive - Université Savoie Mont Blanc/Documents/Ecole/L2/Visi301/neiiiiiiiige/asset/ground_shaker_asset/ground_shaker_asset/Red/Towers",
     "map.height": 30,
     "map.lastUsedFormat": "tmx",
     "openFiles": [
@@ -44,5 +44,5 @@
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.transparentColor": "#000000",
-    "tileset.useTransparentColor": false
+    "tileset.useTransparentColor": true
 }
