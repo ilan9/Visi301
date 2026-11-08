@@ -52,7 +52,7 @@ class Game:
         self.menu = Menu(self.window, self.pieces, self.group_wall_destructible, self.player, self.home)
         
         #defense :
-        self.defense_group.add(Canon(650, 700, 100))
+        #self.defense_group.add(Canon(650, 700, 100))
         
         #spawn :
         self.last_spawn_time = 0
@@ -81,7 +81,7 @@ class Game:
                 self.group_wall.add(wall)
             elif layer.type == "Home":
                 self.home = Home(pygame.Rect(layer.x,layer.y,layer.width,layer.height))
-            elif layer.type == "Wall_destructible":
+            elif layer.type == "rempart":
                 wall_destructible = Wall_destructible(pygame.Rect(layer.x,layer.y,layer.width,layer.height),layer,self.tmx_data, self.group_wall, self.group_wall_destructible)
                 self.group_wall_destructible.add(wall_destructible)
                 self.group_wall.add(wall_destructible)
@@ -167,6 +167,14 @@ class Game:
         self.draw.group_sprite(self.group_monster, self.camera)
         self.draw.group_sprite(self.defense_group, self.camera)
         self.draw.group_sprite(self.projectiles_group, self.camera)
+
+        #Vie des rempart
+        self.draw.group_rampart(self.group_wall_destructible,self.camera)
+
+        #debug
+        debug = True
+        if debug:
+            self.draw.element_debug(self.home,self.camera)
         
         self.draw.text(self.home, self.group_wall_destructible, self.player, self.pieces, self.wood, self.stone, self.time, self.window_width, self.window_height)
         

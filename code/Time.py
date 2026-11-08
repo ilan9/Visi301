@@ -28,8 +28,6 @@ class Time:
             self.day_phase = "Nuit"
         
         self.tem = True
-        print("laaaaaaaaaaaaaaaaa")
-        print(self.tem)
         
 
     def update(self):

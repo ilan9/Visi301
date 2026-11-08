@@ -33,3 +33,7 @@ class Camera():
         newpos_x = pos_x + self.camera.topleft[0]
         newpos_y = pos_y + self.camera.topleft[1]
         return (newpos_x,newpos_y)
+
+    def apply_rect(self, rect):
+        # Cette fonction décale un rectangle simple (pour le debug)
+        return rect.move(self.camera.topleft)

@@ -62,9 +62,7 @@ class Wall_destructible(pygame.sprite.Sprite): # Elle doit hérite de sprite.Spr
         self.group_wall.add(self) # Ajouter au groupe qui gere les collision de passage
         self.group_rampart.add(self) # Ajouter au groupe qui gere les attaques
         self.life = self.life_max
-        for layer in self.tmx_data.layers:
-            if layer.name == self.name:
-                layer.visible = True
+        self.layer_carte.visible = True
         # Non testé
 
 

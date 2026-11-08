@@ -11,7 +11,7 @@ class Monster(pygame.sprite.Sprite) :
         self.damage = 1
         self.cooldown = 1000 #1s entre chaque coup 
         
-        image = self.image = pygame.image.load('asset/zombie.png') #L'image de nos monstres
+        image = self.image = pygame.image.load('asset/zombie.png') #L'image de nos monstres #ne pas enlever, sert de preset pour le calcul de rect
     
         #La taille du monstre :
         self.image_height = 64 * 1.5
@@ -29,15 +29,15 @@ class Monster(pygame.sprite.Sprite) :
         #La position de départ de notre monstre :
         self.rect.x = x
         self.rect.y = y
-        self.motion_x,self.motion_y = self.motion_calcul()
+        self.motion_x,self.motion_y = self.motion_calcul(x,y)
         self.posfin_x = x # Pour le calcul du mouvement car rect ne peut stocker que des int 
         self.posfin_y = y
 
 
         #Animations
         reverse = self.motion_x > 0 # Pour l'orientation de l'image
-        self.anim = {"walk":decoup_image("asset/zombie_animation/Zombie_Default_Walk.png",384,64,6,1,reverse),
-                     "attack":decoup_image("asset/zombie_animation/Zombie_Default_Attack.png",384,64,6,1,reverse),
+        self.anim = {"walk":decoup_image("asset/zombie_animation/zombie_marche.png",192,32,6,1,reverse),
+                     "attack":decoup_image("asset/zombie_animation/Zombie_attaque.png",272,36,6,1,reverse),
                      "hurt":decoup_image("asset/zombie_animation/Zombie_Default_Hurt.png",384,64,6,1, reverse),
                      "dead":decoup_image("asset/zombie_animation/Zombie_Default_Dead.png",384,64,6,1,reverse)
                      }
@@ -48,17 +48,20 @@ class Monster(pygame.sprite.Sprite) :
         self.anmimation_in_progress = False
         self.anim_progress = 0
         self.image = self.anim[self.anim_type][self.anim_progress]
+        self.rect = self.image.get_rect()
 
 
-    def motion_calcul(self):# Calcul du mouvement du monstre 1 seul fois 
+    def motion_calcul(self,posstart_x,posstart_y):# Calcul du mouvement du monstre 1 seul fois 
         posstart_x = self.rect.x
         posstart_y = self.rect.y
-        posfin_x = self.home.rect.x
-        posfin_y = self.home.rect.y
+        posfin_x = self.home.rect.x + self.home.rect.width//2 #Les co exact de la base
+        posfin_y = self.home.rect.y + self.home.rect.height//2
 
         distance_x = posfin_x - posstart_x
         distance_y = posfin_y - posstart_y
         distance_norm = (distance_x**2 + distance_y**2) ** 0.5 # pythagore
+        if distance_norm == 0.0: # Si il est sur le meme pixel que la base le resultat sera une division par 0 donc on le decale de 1 pixel
+            distance_norm = ((distance_x+1)**2 + distance_y**2) ** 0.5 # pythagore
         return distance_x/distance_norm,distance_y/distance_norm
 
 
@@ -113,7 +116,7 @@ class Monster(pygame.sprite.Sprite) :
             element.hurt(self.damage)
             self.last_time_hit = actual_time
             #si il attaque il peut aussi "glisser le long du mur donc on recalcule la direction jusqu'à la maison"
-            self.motion_x,self.motion_y = self.motion_calcul()
+            self.motion_x,self.motion_y = self.motion_calcul(self.rect.x,self.rect.y)
             
             
     def hurt(self, damage):
