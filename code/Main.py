@@ -52,7 +52,10 @@ class Game:
         self.menu = Menu(self.window, self.pieces, self.group_wall_destructible, self.player, self.home)
         
         #defense :
-        #self.defense_group.add(Canon(650, 700, 100))
+        self.defense_group.add(Canon(577, 734, 100))
+        self.defense_group.add(Canon(1152, 734, 100))
+        self.defense_group.add(Canon(577, 1246, 100))
+        self.defense_group.add(Canon(1152, 1246, 100))
         
         #spawn :
         self.last_spawn_time = 0

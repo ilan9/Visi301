@@ -1,5 +1,6 @@
 import pygame
 import math
+from Outils import decoup_image
 
 class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on veut les mettre dans un groupe
     def __init__(self, x, y, health) :
@@ -16,16 +17,9 @@ class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on
 class Canon(Defense) :
     def __init__(self, x, y, health):
         super().__init__(x, y, health)
-        
+        self.images = decoup_image("asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk1.png", 1024, 128, 8, 1)
         #chargement des images d'animation
-        self.images = [
-            pygame.transform.scale(pygame.image.load("asset/canon_animation/canon1.png"), (200,200)),
-            pygame.transform.scale(pygame.image.load("asset/canon_animation/canon2.png"), (200,200)),
-            pygame.transform.scale(pygame.image.load("asset/canon_animation/canon3.png"), (200,200)),
-            pygame.transform.scale(pygame.image.load("asset/canon_animation/canon4.png"), (200,200)),
-            pygame.transform.scale(pygame.image.load("asset/canon_animation/canon5.png"), (200,200)),
-            pygame.transform.scale(pygame.image.load("asset/canon_animation/canon6.png"), (200,200))
-        ]
+        
         self.current_frame = 0
         self.angle = 0
         
@@ -44,7 +38,7 @@ class Canon(Defense) :
         #cadence de tir
         self.last_shoot_time = 0
         self.shoot_delay = 1500
-        self.portee = 450
+        self.portee = 350
         
     def rotate_to(self, target_pos) :
         """Cette fonction permet d'orienter un canon vers un monstre (target_pos)"""
@@ -62,14 +56,28 @@ class Canon(Defense) :
         self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
         self.rect = self.image.get_rect(center=center)
         
+    def distance(self, target) :
+        if target is None :
+            return 99999
         
+        spawn_x = self.rect.centerx
+        spawn_y = self.rect.centery
+        
+        dx = target.rect.centerx - spawn_x
+        dy = target.rect.centery - spawn_y
+            
+        distance = (dx**2 + dy**2)**0.5
+        
+        return distance
         
     def update(self, group_monster, projectiles_group):
         current_time = pygame.time.get_ticks()
         
+        
         if current_time - self.last_shoot_time >= self.shoot_delay :
             cible = self.closest_monster(group_monster)
-            if cible is not None :
+            distance = self.distance(cible)
+            if cible is not None and distance < self.portee :
                 self.tirer(projectiles_group, cible)
                 self.last_shoot_time = current_time
                 
@@ -104,9 +112,9 @@ class Canon(Defense) :
             dx = target.rect.centerx - spawn_x
             dy = target.rect.centery - spawn_y
             
-            distance = (dx**2 + dy**2)**0.5
+            distance = self.distance(target)
             
-            if distance > 0 :
+            if distance > 0 and distance < self.portee :
                 direction_x = dx / distance
                 direction_y = dy / distance
                 
