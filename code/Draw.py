@@ -52,10 +52,10 @@ class Draw():
         self.text_value("Bois : ",wood.quantity,window_width-200,window_height-100)
         self.text_value("Pierre : ",stone.quantity,window_width-200,window_height-130)
 
-    def progress_bar(self,value,rect,camera):
+    def progress_bar(self,value,rect,camera,value_max):
         middle_x = rect.x + rect.width//2
         middle_y = rect.y + rect.height//2
-        border_width = 50
+        border_width = value_max//2
         border_height = 20
         border = pygame.Rect(middle_x-border_width//2,middle_y-border_height//2,border_width,border_height)    
 
@@ -65,10 +65,12 @@ class Draw():
             color = (255, 149, 0)
         elif value <100:
             color = (76, 217, 100)
+        elif value <130:
+            color = (90, 200, 250)
         else:
-            color = (0, 230, 153)
+            color = (0, 122, 255)
 
-        percent = max(0,int(value/100*border_width))
+        percent = max(0,int(value/value_max*border_width))
         interior = pygame.Rect(middle_x-border_width//2,middle_y-border_height//2,percent,border_height)
         pygame.draw.rect(self.window,color,camera.apply_rect(interior))
         pygame.draw.rect(self.window,(0,0,0),camera.apply_rect(border),2)
@@ -77,4 +79,4 @@ class Draw():
     def group_rampart(self,group,camera):
         for sprite in group.sprites():
             if sprite.life > 0:
-                self.progress_bar(sprite.life,sprite.rect,camera)
+                self.progress_bar(sprite.life,sprite.rect,camera,sprite.life_max)

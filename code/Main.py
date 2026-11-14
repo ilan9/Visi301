@@ -11,6 +11,7 @@ from Defense import Canon
 from Menu import Menu
 from Acceuil import Acceuil
 from Draw import Draw
+from MenuTour import MenuTour
 
 class Game:
     def __init__(self):
@@ -50,6 +51,7 @@ class Game:
         )
         self.pieces = Ressources()
         self.menu = Menu(self.window, self.pieces, self.group_wall_destructible, self.player, self.home)
+        self.menu_tower = MenuTour(self.window)
         
         #defense :
         self.defense_group.add(Canon(577, 734, 100))
@@ -121,12 +123,20 @@ class Game:
                         for rampart in self.group_wall_destructible:
                             rampart.healing(2)
                         self.pieces.quantity -= 10
+
+                elif event.key == pygame.K_c: # Soigner les murs avec les pieces.
+                    if self.pieces.quantity >= 10 :
+                        for canon in self.defense_group:
+                            canon.upgrade()
+                        self.pieces.quantity -= 10
                     
                 elif event.key == pygame.K_F11: #Mettre en plein écran
                     pygame.display.toggle_fullscreen()
 
                 elif event.key == pygame.K_e:
                     self.menu.open_menu()
+                elif event.key == pygame.K_t:
+                    self.menu_tower.run()
      
     def update_spawns(self, current_time):
         if self.time.phase % 2 == 0 :

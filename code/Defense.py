@@ -17,9 +17,15 @@ class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on
 class Canon(Defense) :
     def __init__(self, x, y, health):
         super().__init__(x, y, health)
-        self.images = decoup_image("asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk1.png", 1024, 128, 8, 1)
+        self.list_images = ["asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk1.png",
+                            "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk2.png",
+                            "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk3.png",
+                            "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk4.png",
+                            "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk5.png"
+                            ]
+        self.images = decoup_image(self.list_images[0], 1024, 128, 8, 1)
         #chargement des images d'animation
-        
+
         self.current_frame = 0
         self.angle = 0
         
@@ -36,6 +42,8 @@ class Canon(Defense) :
         self.animation_speed = 500
         
         #cadence de tir
+        self.level  = 1
+        self.max_level = 5
         self.last_shoot_time = 0
         self.shoot_delay = 1500
         self.portee = 350
@@ -53,7 +61,10 @@ class Canon(Defense) :
         self.angle = math.degrees(self.angle) - 90 #On la convertie en degré d'angle///.
         
         center = self.rect.center
-        self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
+        #self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle) 
+        #self.rect = self.image.get_rect(center=center)
+ 
+        self.image = pygame.transform.rotozoom(self.images[self.current_frame], self.angle, 1.0) #Devrait etre mieux mais je vois pas la diff
         self.rect = self.image.get_rect(center=center)
         
     def distance(self, target) :
@@ -140,6 +151,13 @@ class Canon(Defense) :
                     min_length = distance
                     closest = monster
         return closest    
+
+    def upgrade(self):
+        if self.level<self.max_level:
+            self.level+=1
+            self.images = decoup_image(self.list_images[self.level-1], 1024, 128, 8, 1)
+            self.shoot_delay -=250
+            self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
         
     
 class Projectiles(pygame.sprite.Sprite) :

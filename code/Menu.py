@@ -20,8 +20,10 @@ class Menu ():
         self.width = self.buttons_size["width"]*4 + self.buttons_size["internal_margin"]*3 + self.buttons_size["external_margin"]*2
         self.height = self.buttons_size["height"]*4 + self.buttons_size["internal_margin"]*3 + self.buttons_size["external_margin"]*2 
 
+        self.group_rampart = group_rampart
         self.rampart = {}
         for rampart in group_rampart:
+            #rampart.name => mur_1...mur_14
             self.rampart[rampart.name] = rampart
 
         self.home = home
@@ -32,9 +34,9 @@ class Menu ():
 
     def create_buttons(self): # Creer les bouttons aux bonnes coordonnées
         list_buttons = []
-        buttons_to_create = []
-            # {"text": "Soigner la maison\n +10 PV", "action": lambda: self.action.healing_home()}, # lambda => permet de stocker des fonction et non leur resultats
-            # {"text": "Ameliorer mur\nNord: -50$\n"+str(self.rampart["Mur Nord"].life)+"/"+str(self.rampart["Mur Nord"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Nord"])},
+        buttons_to_create = [
+            #{"text": "Soigner la maison\n +10 PV", "action": lambda: self.action.healing_home()}, # lambda => permet de stocker des fonction et non leur resultats
+            {"text": "Ameliorer\ntous les murs: -140$\n", "action": lambda : self.action.upgrade_all_rampart(self.group_rampart)},
             # {"text": "Ameliorer mur\nOuest: -50$\n"+str(self.rampart["Mur Ouest"].life)+"/"+str(self.rampart["Mur Ouest"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Ouest"])},
             # {"text": "Ameliorer mur\nEst: -50$\n"+str(self.rampart["Mur Est"].life)+"/"+str(self.rampart["Mur Est"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Est"])},
             # {"text": "Ameliorer mur\nSud: -50$\n"+str(self.rampart["Mur Sud"].life)+"/"+str(self.rampart["Mur Sud"].life_max), "action": lambda : self.action.upgrade_rampart(self.rampart["Mur Sud"])},
@@ -42,7 +44,7 @@ class Menu ():
 
 
             
-        #] #A remplir à la main
+        ] #A remplir à la main
 
         width,height = self.buttons_size["width"],self.buttons_size["height"]
         external_margin,internal_margin = self.buttons_size["external_margin"],self.buttons_size["internal_margin"]
@@ -74,16 +76,8 @@ class Menu ():
             #dessiner les bouttons et voir si il sont cliquer
             pygame.draw.rect(self.window, (215, 205, 185), [self.startx-self.buttons_size["external_margin"], self.starty-self.buttons_size["external_margin"], self.width,self.height])
             for btn in self.list_buttons:
-                if btn.id == 1:
+                if btn.id == 100:
                     btn.change_text("Soigner la maison\n"+str(self.home.life)+"/"+str(self.home.life_max)+" + 10 PV") #Text dynamique
-                elif btn.id == 2:
-                    btn.change_text("Ameliorer mur\nNord: -50R\n"+str(self.rampart["Mur Nord"].life)+"/"+str(self.rampart["Mur Nord"].life_max))
-                elif btn.id == 3:
-                    btn.change_text("Ameliorer mur\nOuest: -50R\n"+str(self.rampart["Mur Ouest"].life)+"/"+str(self.rampart["Mur Ouest"].life_max))
-                elif btn.id == 4:
-                    btn.change_text("Ameliorer mur\nEst: -50R\n"+str(self.rampart["Mur Est"].life)+"/"+str(self.rampart["Mur Est"].life_max))
-                elif btn.id == 5:
-                    btn.change_text("Ameliorer mur\nSud: -50R\n"+str(self.rampart["Mur Sud"].life)+"/"+str(self.rampart["Mur Sud"].life_max))
                 btn.draw(self.window)
                 if btn.rect.collidepoint(pos_souris):
                     btn.action()
