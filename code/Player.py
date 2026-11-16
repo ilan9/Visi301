@@ -63,10 +63,10 @@ class Player(pygame.sprite.Sprite) :
 
     def update(self) :
         key = pygame.key.get_pressed()
-        self.joy_ax = pygame.joystick.Joystick(0).get_axis(0)
-        self.joy_ax1 = pygame.joystick.Joystick(0).get_axis(1)
-        print("axes0",self.joy_ax)
-        print("axes1",self.joy_ax1)
+        #self.joy_ax = pygame.joystick.Joystick(0).get_axis(0)
+        #self.joy_ax1 = pygame.joystick.Joystick(0).get_axis(1)
+        #print("axes0",self.joy_ax)
+        #print("axes1",self.joy_ax1)
 
         velocity_x = 0
         velocity_y = 0
