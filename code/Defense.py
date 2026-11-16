@@ -5,11 +5,9 @@ from Outils import decoup_image
 class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on veut les mettre dans un groupe
     def __init__(self, x, y, health) :
         super().__init__()
-        self.life = health ## Une vie ??
-        self.max_life = health
-       
        
     def hurt(self, damage):
+        """Cette méthode permet d'infliger des dégats à un monstre."""
         self.life -= damage
         if self.life < 0 :
             self.kill()
@@ -68,6 +66,7 @@ class Canon(Defense) :
         self.rect = self.image.get_rect(center=center)
         
     def distance(self, target) :
+        """Cette méthode permet de calculer la distance avec un monstre."""
         if target is None :
             return 99999
         
@@ -84,7 +83,7 @@ class Canon(Defense) :
     def update(self, group_monster, projectiles_group):
         current_time = pygame.time.get_ticks()
         
-        
+        #Permet de tirer en respectant le délai de tir. 
         if current_time - self.last_shoot_time >= self.shoot_delay :
             cible = self.closest_monster(group_monster)
             distance = self.distance(cible)
@@ -134,7 +133,7 @@ class Canon(Defense) :
                 projectiles_group.add(boulet)
             
     def closest_monster(self, group_monster):
-        """Cette fonction permet de trouver le monstre le plus proche dans un groupe de monstre, elle le renvoie."""
+        """Cette méthode permet de trouver le monstre le plus proche dans un groupe de monstre, elle le renvoie."""
         posx = self.rect.centerx
         posy = self.rect.centery
     
