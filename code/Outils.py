@@ -23,3 +23,7 @@ def draw_text_bg(window,color_bg,bg_rect:pygame.Rect,text,x,y,color_text=(255,25
         pygame.draw.rect(window,color_bg,bg_rect)
     info = pygame.font.Font(None, 30).render(text,True,color_text)
     window.blit(info,(x,y))
+
+def draw_money(window,money):
+    draw_text_bg(window,(38, 43, 52),pygame.Rect(1000,525,100,75),str(money)+"$",1015,553,(235, 242, 250))
+    pygame.draw.rect(window,(130, 142, 160),pygame.Rect(1000,525,100,75),2)

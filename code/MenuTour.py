@@ -1,7 +1,7 @@
 import pygame
 from Menu import Button
 from Acceuil import Acceuil
-from Outils import draw_text_bg
+from Outils import draw_text_bg,draw_money
 
 class MenuTour(Acceuil):
     def __init__(self, window,piece,name):
@@ -45,6 +45,7 @@ class MenuTour(Acceuil):
         self.menu = True
         while self.menu:
             self.window.blit(self.image,(300,200))
+            draw_money(self.window,self.piece.quantity)
             draw_text_bg(self.window,(0,0,0),pygame.Rect(0,0,0,0),str(self.name),430,472)
             for event in pygame.event.get(): #Ecouter les évenements "uniques"
                 if event.type == pygame.QUIT:

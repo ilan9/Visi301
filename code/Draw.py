@@ -48,9 +48,9 @@ class Draw():
         self.text_value("PV Joueur : ",player.health,window_width-180,10)
 
         #Ressources
-        self.text_value("Pièces : ",pieces.quantity,window_width-200,window_height-50,"$")
-        self.text_value("Bois : ",wood.quantity,window_width-200,window_height-100)
-        self.text_value("Pierre : ",stone.quantity,window_width-200,window_height-130)
+        # self.text_value("Pièces : ",pieces.quantity,window_width-200,window_height-50,"$")
+        # self.text_value("Bois : ",wood.quantity,window_width-200,window_height-100)
+        # self.text_value("Pierre : ",stone.quantity,window_width-200,window_height-130)
 
     def progress_bar(self,value,rect,camera,value_max):
         middle_x = rect.x + rect.width//2
@@ -80,3 +80,14 @@ class Draw():
         for sprite in group.sprites():
             if sprite.life > 0:
                 self.progress_bar(sprite.life,sprite.rect,camera,sprite.life_max)
+
+    
+    def draw_text_bg(self,window,color_bg,bg_rect:pygame.Rect,text,x,y,color_text=(255,255,255),bg=True):
+        if bg:
+            pygame.draw.rect(window,color_bg,bg_rect)
+        info = pygame.font.Font(None, 30).render(text,True,color_text)
+        window.blit(info,(x,y))
+
+    def draw_money(self,window,money):
+        self.draw_text_bg(window,(38, 43, 52),pygame.Rect(1000,525,100,75),str(money)+"$",1015,553,(235, 242, 250))
+        pygame.draw.rect(window,(130, 142, 160),pygame.Rect(1000,525,100,75),2)  

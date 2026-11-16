@@ -1,5 +1,6 @@
 import pygame
 from ActionMenu import Action
+from Outils import draw_money
 
 def upgrade_wall(direction): # Autre fichiers
     print("ameliorer le mur"+direction)
@@ -27,6 +28,7 @@ class Menu ():
             self.rampart[rampart.name] = rampart
 
         self.home = home
+        self.piece = pieces
         self.action = Action(window,pieces,group_rampart,player,home)
         
         self.list_buttons = self.create_buttons()
@@ -65,6 +67,7 @@ class Menu ():
         print("menu ouvert")
         open = True
         while open :
+            draw_money(self.window,self.piece.quantity)
             pos_souris = 0,0
             for event in pygame.event.get(): #Ecouter les évenements "uniques"
                 if event.type == pygame.KEYDOWN and (event.key == pygame.K_ESCAPE or event.key == pygame.K_e): 

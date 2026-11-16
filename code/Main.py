@@ -56,7 +56,7 @@ class Game:
         )
         self.pieces = Ressources()
         self.menu = Menu(self.window, self.pieces, self.group_wall_destructible, self.player, self.home)
-        self.menu_tower = MenuTour(self.window,self.pieces,"Tour Nord-Est")
+        self.menu_tower = MenuTour(self.window,self.pieces,"Tour Nord-Ouest")
         
         #defense :
         self.defense_group.add(Canon(577, 734, 100))
@@ -198,6 +198,7 @@ class Game:
             self.draw.element_debug(self.home,self.camera)
         
         self.draw.text(self.home, self.group_wall_destructible, self.player, self.pieces, self.wood, self.stone, self.time, self.window_width, self.window_height)
+        self.draw.draw_money(self.window,self.pieces.quantity)
         
         pygame.display.flip()
         
