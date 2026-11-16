@@ -11,6 +11,10 @@ class Player(pygame.sprite.Sprite) :
         self.velocity = 3
         self.damage = 5
 
+        self.joy_ax=0
+        self.joy_ax1=0
+        self.msg = ""
+
         self.monster_atq = {}
         
         image = self.image = pygame.image.load('asset/ranais.png') #L'image de notre joueur
@@ -56,26 +60,33 @@ class Player(pygame.sprite.Sprite) :
                      }
         self.image = self.anim[self.anim_type][self.anim_progress]
 
+
     def update(self) :
         key = pygame.key.get_pressed()
+        self.joy_ax = pygame.joystick.Joystick(0).get_axis(0)
+        self.joy_ax1 = pygame.joystick.Joystick(0).get_axis(1)
+        print("axes0",self.joy_ax)
+        print("axes1",self.joy_ax1)
+
         velocity_x = 0
         velocity_y = 0
         last_posx = self.rect.x
         last_posy = self.rect.y
-            
-        if key[pygame.K_LEFT] and self.rect.x > 0 : ############ METTRE EN PARAM7TRE PLUTOT
-            velocity_x -= self.velocity
-            self.anim_type = "left"
+
+
+        if (key[pygame.K_LEFT] or self.joy_ax<-0.1) and self.rect.x > 0 : ############ METTRE EN PARAM7TRE PLUTOT
+             velocity_x -= self.velocity
+             self.anim_type = "left"
                 
-        if key[pygame.K_RIGHT] and self.rect.x < self.border_x - self.image_width :############ METTRE EN PARAM7TRE PLUTOT
+        if (key[pygame.K_RIGHT] or self.joy_ax>0.1) and self.rect.x < self.border_x - self.image_width :############ METTRE EN PARAM7TRE PLUTOT
             velocity_x += self.velocity
             self.anim_type = "right"
                 
-        if key[pygame.K_DOWN] and self.rect.y < self.border_y - self.image_height :############ METTRE EN PARAM7TRE PLUTOT
+        if (key[pygame.K_DOWN] or self.joy_ax1>0.1) and self.rect.y < self.border_y - self.image_height :############ METTRE EN PARAM7TRE PLUTOT
             velocity_y += self.velocity
             self.anim_type = "down"
                 
-        if key[pygame.K_UP] and self.rect.y > 0 :############ METTRE EN PARAM7TRE PLUTOT
+        if (key[pygame.K_UP] or self.joy_ax1<-0.1) and self.rect.y > 0 :############ METTRE EN PARAM7TRE PLUTOT
             velocity_y -= self.velocity 
             self.anim_type = "up"
 

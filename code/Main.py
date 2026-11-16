@@ -28,6 +28,11 @@ class Game:
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play(-1)
 
+        #manette
+        pygame.joystick.init()
+        # joy = pygame.joystick.Joystick(0)
+        # joy.init()
+
         #écran d'acceuil :
         acceuil = Acceuil(self.window)
         acceuil.run()
