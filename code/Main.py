@@ -56,7 +56,7 @@ class Game:
         )
         self.pieces = Ressources()
         self.menu = Menu(self.window, self.pieces, self.group_wall_destructible, self.player, self.home)
-        self.menu_tower = MenuTour(self.window)
+        self.menu_tower = MenuTour(self.window,self.pieces,"Tour Nord-Est")
         
         #defense :
         self.defense_group.add(Canon(577, 734, 100))
@@ -129,7 +129,7 @@ class Game:
                             rampart.healing(2)
                         self.pieces.quantity -= 10
 
-                elif event.key == pygame.K_c: # Soigner les murs avec les pieces.
+                elif event.key == pygame.K_c: # Améliorer les tours (plus tard avec les canons)
                     if self.pieces.quantity >= 10 :
                         for canon in self.defense_group:
                             canon.upgrade()
@@ -141,6 +141,9 @@ class Game:
                 elif event.key == pygame.K_e:
                     self.menu.open_menu()
                 elif event.key == pygame.K_t:
+                    #Distance avec le socle de tour le plus proche et ouvrir son menu
+                    #for canon in self.defense_group:
+                    #    distance...
                     self.menu_tower.run()
      
     def update_spawns(self, current_time):
