@@ -16,3 +16,10 @@ def decoup_image(chemin_image_animation, witdh,height,nbrimage_x, nbrimage_y, re
                 img = pygame.transform.scale(img,(scale_x,scale_y))
             animation.append(img)
     return animation
+
+
+def draw_text_bg(window,color_bg,bg_rect:pygame.Rect,text,x,y,color_text=(255,255,255),bg=True):
+    if bg:
+        pygame.draw.rect(window,color_bg,bg_rect)
+    info = pygame.font.Font(None, 30).render(text,True,color_text)
+    window.blit(info,(x,y))
