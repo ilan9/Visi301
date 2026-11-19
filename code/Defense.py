@@ -21,9 +21,10 @@ class Canon(Defense) :
                             "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk4.png",
                             "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk5.png"
                             ]
-        self.images = decoup_image(self.list_images[0], 1024, 128, 8, 1)
-        #chargement des images d'animation
-
+        self.im_width = 1024
+        self.im_height = 128
+        self.nb_frames = 8
+        self.images = decoup_image(self.list_images[0], self.im_width, self.im_height, self.nb_frames, 1)
         self.current_frame = 0
         self.angle = 0
         
@@ -154,10 +155,29 @@ class Canon(Defense) :
     def upgrade(self):
         if self.level<self.max_level:
             self.level+=1
-            self.images = decoup_image(self.list_images[self.level-1], 1024, 128, 8, 1)
+            self.images = decoup_image(self.list_images[self.level-1], self.im_width, self.im_height, self.nb_frames, 1)
             self.shoot_delay -=250
             self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
         
+class Canon_laser(Canon) :
+    def __init__(self, x, y, health):
+        super().__init__(x, y, health)
+        self.list_images = ["asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_02_mk1.png",
+                            "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_02_mk2.png",
+                            "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_02_mk3.png",
+                            "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_02_mk4.png"
+                            ]
+        self.im_width = 1408
+        self.im_height = 128
+        self.nb_frames = 11
+        self.images = decoup_image(self.list_images[0], self.im_width, self.im_height, self.nb_frames, 1)
+        #chargement des images d'animation
+        self.image = self.images[0]
+        self.rect = self.image.get_rect(topleft=(x,y))
+        self.current_frame = 0
+        self.angle = 0
+        
+        self.max_level = 4
     
 class Projectiles(pygame.sprite.Sprite) :
     """Cette classe gère les différents types de projectiles."""

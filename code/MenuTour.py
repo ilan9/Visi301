@@ -2,11 +2,15 @@ import pygame
 from Menu import Button
 from Acceuil import Acceuil
 from Outils import draw_text_bg,draw_money
+from Defense import Canon, Canon_laser
 
 class MenuTour(Acceuil):
-    def __init__(self, window,piece,name):
+    def __init__(self, window,piece,name, x, y, defense_group):
         super().__init__(window)
-
+        self.x = x
+        self.y = y
+        self.defense_group = defense_group
+        
         self.window = window
         self.piece = piece
         self.name = name
@@ -61,6 +65,11 @@ class MenuTour(Acceuil):
                             self.level+=1
 
                             #cree le canon ici avec self.selected ou self.choix
+                            if self.selected == 1 :
+                                nouveau_canon = Canon(self.x, self.y, 100)
+                            else :
+                                nouveau_canon = Canon_laser(self.x, self.y, 100)
+                            self.defense_group.add(nouveau_canon)
                             print("Le joueur a achete le canon de type :"+str(self.selected))
                         elif self.level <4:
                             if self.selected ==1:

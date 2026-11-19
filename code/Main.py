@@ -56,7 +56,7 @@ class Game:
         )
         self.pieces = Ressources()
         self.menu = Menu(self.window, self.pieces, self.group_wall_destructible, self.player, self.home)
-        self.menu_tower = MenuTour(self.window,self.pieces,"Tour Nord-Ouest")
+        self.menu_tower = MenuTour(self.window,self.pieces,"Tour Nord-Ouest", 577, 734, self.defense_group)
         
         #defense :
         self.defense_group.add(Canon(577, 734, 100))
