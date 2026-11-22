@@ -7,7 +7,7 @@ from Camera import Camera
 from Home import Home, Wall, Wall_destructible
 from Spawner import monster_spawner
 from Ressources import Ressources, Farm
-from Defense import Canon
+from Defense import Boulet, Laser, Canon, Canon_laser
 from Menu import Menu
 from Acceuil import Acceuil
 from Draw import Draw
@@ -59,7 +59,7 @@ class Game:
         self.menu_tower = MenuTour(self.window,self.pieces,"Tour Nord-Ouest", 577, 734, self.defense_group)
         
         #defense :
-        self.defense_group.add(Canon(577, 734, 100))
+        #self.defense_group.add(Canon(577, 734, 100))
         self.defense_group.add(Canon(1152, 734, 100))
         self.defense_group.add(Canon(577, 1246, 100))
         self.defense_group.add(Canon(1152, 1246, 100))
@@ -160,7 +160,8 @@ class Game:
         
             for monster in hurt_monsters :
                 monster.hurt(boulet.damage)
-                boulet.kill()
+                if type(boulet) == Boulet :
+                    boulet.kill()
                 
     def update(self) :
         current_time = pygame.time.get_ticks()

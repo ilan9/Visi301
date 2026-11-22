@@ -45,7 +45,9 @@ class Canon(Defense) :
         self.max_level = 5
         self.last_shoot_time = 0
         self.shoot_delay = 1500
-        self.portee = 350
+        self.portee = 450
+        
+        self.type_munition = Boulet
         
     def rotate_to(self, target_pos) :
         """Cette fonction permet d'orienter un canon vers un monstre (target_pos)"""
@@ -89,7 +91,7 @@ class Canon(Defense) :
             cible = self.closest_monster(group_monster)
             distance = self.distance(cible)
             if cible is not None and distance < self.portee :
-                self.tirer(projectiles_group, cible)
+                self.tirer(projectiles_group, cible, self.type_munition)
                 self.last_shoot_time = current_time
                 
         #gestion de l'animation :
@@ -111,7 +113,7 @@ class Canon(Defense) :
             
             
     
-    def tirer(self, projectiles_group, target) :
+    def tirer(self, projectiles_group, target, type_munition) :
             self.rotate_to(target)
             self.is_animating = True
             self.last_time_anime = pygame.time.get_ticks()
@@ -130,8 +132,8 @@ class Canon(Defense) :
                 direction_y = dy / distance
                 
                 
-                boulet = Projectiles(spawn_x, spawn_y, "asset/canon_animation/boulet_canon.png", direction_x, direction_y)
-                projectiles_group.add(boulet)
+                projectile = type_munition(spawn_x, spawn_y, direction_x, direction_y)
+                projectiles_group.add(projectile)
             
     def closest_monster(self, group_monster):
         """Cette méthode permet de trouver le monstre le plus proche dans un groupe de monstre, elle le renvoie."""
@@ -178,22 +180,18 @@ class Canon_laser(Canon) :
         self.angle = 0
         
         self.max_level = 4
+        self.type_munition = Laser
+        
+        self.shoot_delay = 4000
+        self.portee = 250
     
 class Projectiles(pygame.sprite.Sprite) :
     """Cette classe gère les différents types de projectiles."""
-    def __init__(self, x, y, image, direction_x, direction_y) :
+    def __init__(self, direction_x, direction_y) :
         super().__init__()
-        self.image = pygame.image.load(image)
-        self.image = pygame.transform.scale(self.image, (30, 30))
-        
-        self.rect = self.image.get_rect(center=(x,y))
-        self.pos_x = self.rect.x
-        self.pos_y = self.rect.y
-        
         self.direction_x = direction_x
         self.direction_y = direction_y
-        self.velocity = 10
-        self.damage = 10 
+        
         
     def update(self) :
         self.pos_x += self.direction_x * self.velocity
@@ -203,3 +201,31 @@ class Projectiles(pygame.sprite.Sprite) :
         
         if self.rect.x < -200 or self.rect.x > 3000 or self.rect.y < -200 or self.rect.y > 3000 :
             self.kill()
+            
+class Boulet(Projectiles) :
+    def __init__(self, x, y, direction_x, direction_y):
+        super().__init__(direction_x, direction_y)
+        image = "asset/canon_animation/boulet_canon.png"
+        self.image = pygame.image.load(image)
+        self.image = pygame.transform.scale(self.image, (30, 30))
+        
+        self.rect = self.image.get_rect(center=(x,y))
+        self.pos_x = self.rect.x
+        self.pos_y = self.rect.y
+        
+        self.velocity = 10
+        self.damage = 10 
+        
+class Laser(Projectiles) :
+    def __init__(self, x, y, direction_x, direction_y):
+        super().__init__(direction_x, direction_y)
+        image = "asset/canon_animation/laser.png"
+        self.image = pygame.image.load(image)
+        self.image = pygame.transform.scale(self.image, (40, 40))
+        
+        self.rect = self.image.get_rect(center=(x,y))
+        self.pos_x = self.rect.x
+        self.pos_y = self.rect.y
+        
+        self.velocity = 5
+        self.damage = 5 
