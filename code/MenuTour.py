@@ -1,15 +1,13 @@
 import pygame
-from Menu import Button
-from Acceuil import Acceuil
 from Outils import draw_text_bg,draw_money
-from Defense import Canon, Canon_laser
+from Defense import Defense,Canon, Canon_laser
 
-class MenuTour(Acceuil):
+class MenuTour():
     def __init__(self, window,piece,name, x, y, defense_group):
-        super().__init__(window)
         self.x = x
         self.y = y
         self.defense_group = defense_group
+        self.canon:Defense = None
         
         self.window = window
         self.piece = piece
@@ -66,25 +64,31 @@ class MenuTour(Acceuil):
 
                             #cree le canon ici avec self.selected ou self.choix
                             if self.selected == 1 :
-                                nouveau_canon = Canon(self.x, self.y, 100)
+                                self.canon = Canon(self.x, self.y, 100,self)
                             else :
-                                nouveau_canon = Canon_laser(self.x, self.y, 100)
-                            self.defense_group.add(nouveau_canon)
+                                self.canon = Canon_laser(self.x, self.y, 100,self)
+                            self.defense_group.add(self.canon)
                             print("Le joueur a achete le canon de type :"+str(self.selected))
                         elif self.level <4:
                             if self.selected ==1:
                                 self.piece.increases(self.choix.sell[self.level-1])# Rembourse en parti
                                 self.level = 0
                                 #Supprimer le canon
+                                if self.canon:
+                                    self.canon.kill()
                                 
                             elif self.piece.quantity >= self.choix.cost[self.level]:
                                 self.piece.reduce(self.choix.cost[self.level])#Payer
                                 self.level+=1
+                                if self.canon:
+                                    self.canon.upgrade()
 
                         elif self.selected ==1:
                             self.piece.increases(self.choix.sell[self.level-1])# Rembourse en parti
                             self.level = 0
                             #Supprimer le canon
+                            if self.canon:
+                                self.canon.kill()
                             
 
             #dessin button
@@ -109,11 +113,6 @@ class MenuTour(Acceuil):
             else:
                 self.window.blit(self.choix.image,(350,300))
                 draw_text_bg(self.window,(10, 250, 10),pygame.Rect(375,220,55,20),"+"+str(self.t2.sell[self.level-1])+"$",375,220)
-
-
-
-
-
 
 
             pygame.draw.rect(self.window,(255, 204, 0),self.carre,6) #séléctionner

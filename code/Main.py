@@ -12,6 +12,7 @@ from Menu import Menu
 from Acceuil import Acceuil
 from Draw import Draw
 from MenuTour import MenuTour
+from Outils import distance
 
 class Game:
     def __init__(self):
@@ -50,19 +51,25 @@ class Game:
         self.group_monster = pygame.sprite.Group()# Comme une liste mais les methode de monstre s'utilise direct sur group (voir update)
         self.defense_group = pygame.sprite.Group()
         self.projectiles_group = pygame.sprite.Group()
+        self.menu_tower_tab = []
         
         self.player = Player(
             350, 350, self.map_width, self.map_height, self.group_wall, self.group_monster, self.group_wall_destructible, self.group_wood, self.group_stone, self.time
         )
         self.pieces = Ressources()
         self.menu = Menu(self.window, self.pieces, self.group_wall_destructible, self.player, self.home)
-        self.menu_tower = MenuTour(self.window,self.pieces,"Tour Nord-Ouest", 577, 734, self.defense_group)
+
+
+        self.menu_tower_tab.append( MenuTour(self.window,self.pieces,"Tour Nord-Ouest", 577, 734, self.defense_group))
+        self.menu_tower_tab.append( MenuTour(self.window,self.pieces,"Tour Nord-Est",1152, 734, self.defense_group))
+        self.menu_tower_tab.append( MenuTour(self.window,self.pieces,"Tour Sud-Ouest", 577, 1246, self.defense_group))
+        self.menu_tower_tab.append( MenuTour(self.window,self.pieces,"Tour Sud-Est",1152, 1246, self.defense_group))
         
         #defense :
         #self.defense_group.add(Canon(577, 734, 100))
-        self.defense_group.add(Canon(1152, 734, 100))
-        self.defense_group.add(Canon(577, 1246, 100))
-        self.defense_group.add(Canon(1152, 1246, 100))
+        # self.defense_group.add(Canon(1152, 734, 100))
+        # self.defense_group.add(Canon(577, 1246, 100))
+        # self.defense_group.add(Canon(1152, 1246, 100))
         
         #spawn :
         self.last_spawn_time = 0
@@ -141,10 +148,9 @@ class Game:
                 elif event.key == pygame.K_e:
                     self.menu.open_menu()
                 elif event.key == pygame.K_t:
-                    #Distance avec le socle de tour le plus proche et ouvrir son menu
-                    #for canon in self.defense_group:
-                    #    distance...
-                    self.menu_tower.run()
+                    tower_menu = distance(self.menu_tower_tab,self.player.rect.x,self.player.rect.y)
+                    if tower_menu:
+                        tower_menu.run()
      
     def update_spawns(self, current_time):
         if self.time.phase % 2 == 0 :

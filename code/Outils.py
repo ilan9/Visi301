@@ -27,3 +27,15 @@ def draw_text_bg(window,color_bg,bg_rect:pygame.Rect,text,x,y,color_text=(255,25
 def draw_money(window,money):
     draw_text_bg(window,(38, 43, 52),pygame.Rect(1000,525,100,75),str(money)+"$",1015,553,(235, 242, 250))
     pygame.draw.rect(window,(130, 142, 160),pygame.Rect(1000,525,100,75),2)
+
+def distance(tab, player_x, player_y):
+    """Cette méthode permet de trouver l'élément le plus proche."""
+    min_length = 99999999
+    closest = None #Sécurité
+    for element in tab:
+        #on calcule la norme du vecteur.
+        distance = ((element.x - player_x)**2 + (element.y - player_y)**2)**0.5
+        if distance < min_length :
+            min_length = distance
+            closest = element
+    return closest   

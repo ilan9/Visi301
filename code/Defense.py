@@ -3,7 +3,7 @@ import math
 from Outils import decoup_image
 
 class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on veut les mettre dans un groupe
-    def __init__(self, x, y, health) :
+    def __init__(self, x, y, health, menu):
         super().__init__()
        
     def hurt(self, damage):
@@ -13,8 +13,8 @@ class Defense(pygame.sprite.Sprite): # Elle doit hérite de sprite.Sprite car on
             self.kill()
             
 class Canon(Defense) :
-    def __init__(self, x, y, health):
-        super().__init__(x, y, health)
+    def __init__(self, x, y, health, menu):
+        super().__init__(x, y, health, menu)
         self.list_images = ["asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk1.png",
                             "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk2.png",
                             "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_01_mk3.png",
@@ -34,6 +34,7 @@ class Canon(Defense) :
         
         self.rect.x = x
         self.rect.y = y
+        self.menu = menu
         
         #gestion de l'animation
         self.is_animating = False
@@ -162,8 +163,8 @@ class Canon(Defense) :
             self.image = pygame.transform.rotate(self.images[self.current_frame], self.angle)
         
 class Canon_laser(Canon) :
-    def __init__(self, x, y, health):
-        super().__init__(x, y, health)
+    def __init__(self, x, y, health,menu):
+        super().__init__(x, y, health, menu)
         self.list_images = ["asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_02_mk1.png",
                             "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_02_mk2.png",
                             "asset/ground_shaker_asset/ground_shaker_asset/Red/Weapons/turret_02_mk3.png",
